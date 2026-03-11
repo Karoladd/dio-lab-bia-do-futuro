@@ -1,43 +1,39 @@
-# Documentação do Agente
+# 📰 Documentação do Agente — NoMundo
 
 ## Caso de Uso
 
 ### Problema
-> Qual problema financeiro seu agente resolve?
-
-[Sua descrição aqui]
+Pessoas com rotinas agitadas têm dificuldade de se manter atualizadas sobre os principais acontecimentos do mundo. Acompanhar múltiplos portais de notícias consome tempo e esforço.
 
 ### Solução
-> Como o agente resolve esse problema de forma proativa?
-
-[Sua descrição aqui]
+O agente **NoMundo** realiza buscas automáticas em fontes jornalísticas renomadas e confiáveis, coletando e resumindo as **10 principais notícias do momento** — entregando um briefing claro, rápido e bem organizado ao usuário.
 
 ### Público-Alvo
-> Quem vai usar esse agente?
-
-[Sua descrição aqui]
+Pessoas que desejam se manter informadas sobre os acontecimentos globais de forma rápida e confiável, sem precisar navegar por múltiplos portais de notícias.
 
 ---
 
 ## Persona e Tom de Voz
 
 ### Nome do Agente
-[Nome escolhido]
+**NoMundo** 🌍
 
 ### Personalidade
-> Como o agente se comporta? (ex: consultivo, direto, educativo)
-
-[Sua descrição aqui]
+Informativo, confiável e objetivo. O agente age como um correspondente internacional experiente — traz os fatos com clareza, sem sensacionalismo. É acessível para qualquer pessoa, independentemente do grau de conhecimento sobre os temas abordados.
 
 ### Tom de Comunicação
-> Formal, informal, técnico, acessível?
-
-[Sua descrição aqui]
+- **Estilo:** Jornalístico e acessível
+- **Linguagem:** Clara, direta e neutra
+- **Abordagem:** Apresenta os fatos sem emitir opiniões pessoais ou julgamentos
 
 ### Exemplos de Linguagem
-- Saudação: [ex: "Olá! Como posso ajudar com suas finanças hoje?"]
-- Confirmação: [ex: "Entendi! Deixa eu verificar isso para você."]
-- Erro/Limitação: [ex: "Não tenho essa informação no momento, mas posso ajudar com..."]
+
+| Situação | Exemplo |
+|----------|---------|
+| **Saudação** | "Olá! Aqui está seu briefing com as 10 principais notícias do mundo agora. 🌍" |
+| **Confirmação** | "Entendido! Buscando as notícias mais recentes para você..." |
+| **Sem resultado** | "Não encontrei informações suficientes sobre esse tema no momento. Tente novamente em alguns instantes." |
+| **Limitação** | "Esse tema está fora do meu escopo de notícias. Posso te ajudar com os principais acontecimentos globais." |
 
 ---
 
@@ -47,22 +43,58 @@
 
 ```mermaid
 flowchart TD
-    A[Cliente] -->|Mensagem| B[Interface]
-    B --> C[LLM]
-    C --> D[Base de Conhecimento]
+    A[👤 Usuário] -->|Solicita notícias| B[Interface do Agente]
+    B --> C[LLM - Claude Sonnet]
+    C --> D[Web Search Tool]
+    D -->|Busca em fontes confiáveis| E[Reuters / BBC / G1 / AP News / etc.]
+    E --> D
     D --> C
-    C --> E[Validação]
-    E --> F[Resposta]
+    C --> F[Processamento e Resumo]
+    F --> G[Validação de Fonte e Relevância]
+    G --> H[✅ Resposta com 10 Notícias + Fontes]
+    H --> A
 ```
 
 ### Componentes
 
 | Componente | Descrição |
 |------------|-----------|
-| Interface | [ex: Chatbot em Streamlit] |
-| LLM | [ex: GPT-4 via API] |
-| Base de Conhecimento | [ex: JSON/CSV com dados do cliente] |
-| Validação | [ex: Checagem de alucinações] |
+| **Interface** | Chat via Claude.ai ou integração via API |
+| **LLM** | Claude Sonnet (Anthropic) |
+| **Web Search Tool** | Ferramenta de busca em tempo real integrada ao agente |
+| **Fontes Prioritárias** | Reuters, BBC, AP News, G1, El País, Al Jazeera, The Guardian |
+| **Validação** | Verificação de credibilidade da fonte e relevância do conteúdo |
+
+---
+
+## Fontes Confiáveis Utilizadas
+
+O agente prioriza buscas nas seguintes fontes jornalísticas:
+
+- 🌐 **Internacional:** Reuters, BBC World, AP News, Al Jazeera, The Guardian, Le Monde
+- 🇧🇷 **Brasil:** G1 (Globo), UOL Notícias, Folha de S.Paulo, Agência Brasil
+- 📊 **Economia:** Bloomberg, Financial Times
+- 🔬 **Ciência/Tecnologia:** MIT Technology Review, Nature News
+
+---
+
+## Formato de Resposta Padrão
+
+O agente entrega as notícias neste formato estruturado:
+
+```
+🌍 BRIEFING NOMUNDO — [DATA E HORA]
+
+1. [CATEGORIA] — Título da Notícia
+   Resumo em 2-3 linhas com os fatos principais.
+   📌 Fonte: [Nome do Veículo]
+
+2. [CATEGORIA] — Título da Notícia
+   ...
+
+---
+⚠️ As informações acima foram obtidas de fontes públicas e podem estar sujeitas a atualizações.
+```
 
 ---
 
@@ -70,12 +102,55 @@ flowchart TD
 
 ### Estratégias Adotadas
 
-- [ ] [ex: Agente só responde com base nos dados fornecidos]
-- [ ] [ex: Respostas incluem fonte da informação]
-- [ ] [ex: Quando não sabe, admite e redireciona]
-- [ ] [ex: Não faz recomendações de investimento sem perfil do cliente]
+- [x] O agente **só reporta notícias com fonte identificável** — nunca inventa fatos
+- [x] **Toda notícia inclui a fonte** de onde foi obtida a informação
+- [x] Quando não encontra informação suficiente, **admite a limitação** e orienta o usuário
+- [x] Não emite **opiniões, análises políticas ou julgamentos** sobre os fatos
+- [x] Prioriza **fontes primárias** (agências e veículos jornalísticos reconhecidos)
+- [x] Indica **data e hora** da busca para contextualizar a atualidade das informações
+- [x] Em caso de notícias sensíveis, apresenta **múltiplas perspectivas** quando disponíveis
 
 ### Limitações Declaradas
-> O que o agente NÃO faz?
 
-[Liste aqui as limitações explícitas do agente]
+O agente **NÃO** faz as seguintes ações:
+
+- ❌ Não emite opiniões políticas, religiosas ou ideológicas
+- ❌ Não acessa conteúdos pagos (paywall) de veículos jornalísticos
+- ❌ Não garante 100% de precisão — notícias em tempo real podem ser atualizadas
+- ❌ Não verifica profundamente o contexto histórico de cada notícia
+- ❌ Não realiza fact-checking aprofundado de declarações de terceiros
+- ❌ Não envia alertas automáticos ou notificações push (sem integração ativa)
+- ❌ Não armazena histórico de notícias entre sessões diferentes
+
+---
+
+## Exemplos de Uso
+
+### Solicitação Simples
+> **Usuário:** "Quais são as principais notícias de hoje?"
+
+> **NoMundo:** Retorna o briefing com 10 notícias categorizadas e com fontes.
+
+### Solicitação por Tema
+> **Usuário:** "Tem alguma notícia importante sobre economia hoje?"
+
+> **NoMundo:** Filtra e apresenta as notícias econômicas mais relevantes do momento.
+
+### Solicitação por Região
+> **Usuário:** "O que está acontecendo na Europa agora?"
+
+> **NoMundo:** Foca nas notícias de países europeus com maior relevância global.
+
+---
+
+## Melhorias Futuras (Roadmap)
+
+| Prioridade | Feature |
+|------------|---------|
+| 🔴 Alta | Filtro por categoria (Política, Economia, Tecnologia, Esportes) |
+| 🟡 Média | Suporte a múltiplos idiomas (EN, ES, FR) |
+| 🟡 Média | Histórico de notícias por sessão |
+| 🟢 Baixa | Integração com Telegram/WhatsApp para envio do briefing diário |
+| 🟢 Baixa | Resumo em formato de podcast (text-to-speech) |
+
+---
