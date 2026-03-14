@@ -1,149 +1,174 @@
-# 🤖 Agente Financeiro Inteligente com IA Generativa
+# 🌍 NoMundo — Agente Jornalístico com IA Generativa
 
 ## Contexto
 
-Os assistentes virtuais no setor financeiro estão evoluindo de simples chatbots reativos para **agentes inteligentes e proativos**. Neste desafio, você vai idealizar e prototipar um agente financeiro que utiliza IA Generativa para:
+O acesso à informação de qualidade é um desafio crescente. Com dezenas de portais, redes sociais e notificações disputando atenção, **filtrar o que realmente importa consome tempo demais**.
 
-- **Antecipar necessidades** ao invés de apenas responder perguntas
-- **Personalizar** sugestões com base no contexto de cada cliente
-- **Cocriar soluções** financeiras de forma consultiva
-- **Garantir segurança** e confiabilidade nas respostas (anti-alucinação)
+O **NoMundo** é um agente jornalístico inteligente que utiliza IA Generativa para:
 
-> [!TIP]
-> Na pasta [`examples/`](./examples/) você encontra referências de implementação para cada etapa deste desafio.
+- **Buscar em tempo real** as principais notícias do mundo em fontes confiáveis
+- **Resumir e categorizar** os acontecimentos de forma clara e objetiva
+- **Personalizar** o briefing por tema ou região conforme o interesse do usuário
+- **Garantir confiabilidade** citando sempre a fonte de cada notícia (anti-alucinação)
+
+> 💡 Na pasta [`examples/`](./examples) você encontra referências de implementação para cada etapa deste projeto.
 
 ---
 
-## O Que Você Deve Entregar
+## O Que Foi Entregue
 
 ### 1. Documentação do Agente
 
-Defina **o que** seu agente faz e **como** ele funciona:
+Define **o que** o NoMundo faz e **como** ele funciona:
 
-- **Caso de Uso:** Qual problema financeiro ele resolve? (ex: consultoria de investimentos, planejamento de metas, alertas de gastos)
-- **Persona e Tom de Voz:** Como o agente se comporta e se comunica?
-- **Arquitetura:** Fluxo de dados e integração com a base de conhecimento
-- **Segurança:** Como evitar alucinações e garantir respostas confiáveis?
+- **Caso de Uso:** Briefing jornalístico em tempo real com as 10 principais notícias do mundo
+- **Persona e Tom de Voz:** Correspondente internacional — neutro, objetivo e confiável
+- **Arquitetura:** Fluxo de busca web → sumarização → entrega categorizada com fontes
+- **Segurança:** Regras anti-alucinação, citação obrigatória de fontes e recusa de opinião
 
-📄 **Template:** [`docs/01-documentacao-agente.md`](./docs/01-documentacao-agente.md)
+📄 **Documentação:** [`docs/01-documentacao-agente.md`](./docs/01-documentacao-agente.md)
 
 ---
 
 ### 2. Base de Conhecimento
 
-Utilize os **dados mockados** disponíveis na pasta [`data/`](./data/) para alimentar seu agente:
+O NoMundo não utiliza arquivos estáticos — sua base de conhecimento é **dinâmica e em tempo real**, alimentada via `web_search tool` a cada sessão.
 
-| Arquivo | Formato | Descrição |
-|---------|---------|-----------|
-| `transacoes.csv` | CSV | Histórico de transações do cliente |
-| `historico_atendimento.csv` | CSV | Histórico de atendimentos anteriores |
-| `perfil_investidor.json` | JSON | Perfil e preferências do cliente |
-| `produtos_financeiros.json` | JSON | Produtos e serviços disponíveis |
+| Fonte | Tipo | Descrição |
+|-------|------|-----------|
+| Reuters, BBC, AP News | Web (tempo real) | Notícias internacionais |
+| G1, Agência Brasil | Web (tempo real) | Notícias nacionais |
+| Bloomberg, Financial Times | Web (tempo real) | Economia e mercados |
+| Al Jazeera, The Guardian | Web (tempo real) | Geopolítica e perspectiva global |
+| MIT Technology Review | Web (tempo real) | Tecnologia e ciência |
 
-Você pode adaptar ou expandir esses dados conforme seu caso de uso.
-
-📄 **Template:** [`docs/02-base-conhecimento.md`](./docs/02-base-conhecimento.md)
+📄 **Documentação:** [`docs/02-base-conhecimento.md`](./docs/02-base-conhecimento.md)
 
 ---
 
 ### 3. Prompts do Agente
 
-Documente os prompts que definem o comportamento do seu agente:
+Documenta os prompts que definem o comportamento do NoMundo:
 
-- **System Prompt:** Instruções gerais de comportamento e restrições
-- **Exemplos de Interação:** Cenários de uso com entrada e saída esperada
-- **Tratamento de Edge Cases:** Como o agente lida com situações limite
+- **System Prompt:** Persona jornalística, regras de neutralidade, formato de briefing e fontes prioritárias
+- **Few-Shot Examples:** Cenários de uso com entrada e saída esperada embutidos no prompt
+- **Edge Cases:** Fora do escopo, pedido de opinião política, tema sem cobertura
 
-📄 **Template:** [`docs/03-prompts.md`](./docs/03-prompts.md)
+📄 **Documentação:** [`docs/03-prompts.md`](./docs/03-prompts.md)
 
 ---
 
 ### 4. Aplicação Funcional
 
-Desenvolva um **protótipo funcional** do seu agente:
+Protótipo funcional do NoMundo construído com Streamlit + API Anthropic:
 
-- Chatbot interativo (sugestão: Streamlit, Gradio ou similar)
-- Integração com LLM (via API ou modelo local)
-- Conexão com a base de conhecimento
+```
+src/
+├── app.py           # Interface Streamlit com chat e streaming
+├── agente.py        # Lógica do agente e integração com a API
+├── config.py        # System prompt, modelo e configurações
+└── requirements.txt # Dependências do projeto
+```
 
-📁 **Pasta:** [`src/`](./src/)
+**Como rodar:**
+
+```bash
+# 1. Instale as dependências
+pip install -r requirements.txt
+
+# 2. Configure sua API Key
+cp .env.example .env
+# Edite o .env com sua ANTHROPIC_API_KEY
+
+# 3. Rode a aplicação
+streamlit run app.py
+```
+
+📁 **Código:** [`src/`](./src)
 
 ---
 
 ### 5. Avaliação e Métricas
 
-Descreva como você avalia a qualidade do seu agente:
+Descreve como avaliar a qualidade do NoMundo:
 
-**Métricas Sugeridas:**
-- Precisão/assertividade das respostas
-- Taxa de respostas seguras (sem alucinações)
-- Coerência com o perfil do cliente
+**Métricas principais:**
 
-📄 **Template:** [`docs/04-metricas.md`](./docs/04-metricas.md)
+| Métrica | O que avalia |
+|---------|--------------|
+| Atualidade | As notícias são das últimas 24h? |
+| Assertividade | O agente respondeu o que foi perguntado? |
+| Confiabilidade da Fonte | As fontes citadas são reconhecidas? |
+| Segurança | O agente evitou inventar informações? |
+| Cobertura | O briefing trouxe variedade de categorias? |
+
+📄 **Documentação:** [`docs/04-metricas.md`](./docs/04-metricas.md)
 
 ---
 
 ### 6. Pitch
 
-Grave um **pitch de 3 minutos** (estilo elevador) apresentando:
+Roteiro completo de apresentação de 3 minutos do NoMundo:
 
-- Qual problema seu agente resolve?
-- Como ele funciona na prática?
-- Por que essa solução é inovadora?
+- **Problema:** Excesso de informação → dificuldade de se manter informado
+- **Solução:** Correspondente pessoal com IA que entrega o essencial em segundos
+- **Demo:** Roteiro cronometrado com os melhores cenários para apresentar
+- **Diferencial:** Tempo real + fontes verificáveis + neutralidade jornalística
 
-📄 **Template:** [`docs/05-pitch.md`](./docs/05-pitch.md)
+📄 **Documentação:** [`docs/05-pitch.md`](./docs/05-pitch.md)
 
 ---
 
-## Ferramentas Sugeridas
+## Ferramentas Utilizadas
 
-Todas as ferramentas abaixo possuem versões gratuitas:
-
-| Categoria | Ferramentas |
-|-----------|-------------|
-| **LLMs** | [ChatGPT](https://chat.openai.com/), [Copilot](https://copilot.microsoft.com/), [Gemini](https://gemini.google.com/), [Claude](https://claude.ai/), [Ollama](https://ollama.ai/) |
-| **Desenvolvimento** | [Streamlit](https://streamlit.io/), [Gradio](https://www.gradio.app/), [Google Colab](https://colab.research.google.com/) |
-| **Orquestração** | [LangChain](https://www.langchain.com/), [LangFlow](https://www.langflow.org/), [CrewAI](https://www.crewai.com/) |
-| **Diagramas** | [Mermaid](https://mermaid.js.org/), [Draw.io](https://app.diagrams.net/), [Excalidraw](https://excalidraw.com/) |
+| Categoria | Ferramenta |
+|-----------|-----------|
+| **LLM** | [Claude Sonnet](https://claude.ai/) (Anthropic) |
+| **Web Search** | Anthropic Web Search Tool (tempo real) |
+| **Interface** | [Streamlit](https://streamlit.io/) |
+| **Diagramas** | [Mermaid](https://mermaid.js.org/) |
+| **Observabilidade** | [LangWatch](https://langwatch.ai/) / [LangFuse](https://langfuse.com/) |
 
 ---
 
 ## Estrutura do Repositório
 
 ```
-📁 lab-agente-financeiro/
+📁 dio-lab-bia-do-futuro/
 │
 ├── 📄 README.md
 │
-├── 📁 data/                          # Dados mockados para o agente
-│   ├── historico_atendimento.csv     # Histórico de atendimentos (CSV)
-│   ├── perfil_investidor.json        # Perfil do cliente (JSON)
-│   ├── produtos_financeiros.json     # Produtos disponíveis (JSON)
-│   └── transacoes.csv                # Histórico de transações (CSV)
+├── 📁 docs/                        # Documentação completa do projeto
+│   ├── 01-documentacao-agente.md   # Caso de uso, persona e arquitetura
+│   ├── 02-base-conhecimento.md     # Estratégia de dados em tempo real
+│   ├── 03-prompts.md               # System prompt e exemplos de interação
+│   ├── 04-metricas.md              # Avaliação, testes e métricas técnicas
+│   └── 05-pitch.md                 # Roteiro do pitch de 3 minutos
 │
-├── 📁 docs/                          # Documentação do projeto
-│   ├── 01-documentacao-agente.md     # Caso de uso e arquitetura
-│   ├── 02-base-conhecimento.md       # Estratégia de dados
-│   ├── 03-prompts.md                 # Engenharia de prompts
-│   ├── 04-metricas.md                # Avaliação e métricas
-│   └── 05-pitch.md                   # Roteiro do pitch
+├── 📁 src/                         # Código da aplicação
+│   ├── app.py                      # Interface Streamlit
+│   ├── agente.py                   # Lógica do agente
+│   ├── config.py                   # Configurações e system prompt
+│   ├── requirements.txt            # Dependências
+│   └── .env.example                # Template de variáveis de ambiente
 │
-├── 📁 src/                           # Código da aplicação
-│   └── app.py                        # (exemplo de estrutura)
+├── 📁 assets/                      # Imagens e diagramas
 │
-├── 📁 assets/                        # Imagens e diagramas
-│   └── ...
-│
-└── 📁 examples/                      # Referências e exemplos
-    └── README.md
+└── 📁 examples/                    # Referências e exemplos
 ```
 
 ---
 
 ## Dicas Finais
 
-1. **Comece pelo prompt:** Um bom system prompt é a base de um agente eficaz
-2. **Use os dados mockados:** Eles garantem consistência e evitam problemas com dados sensíveis
-3. **Foque na segurança:** No setor financeiro, evitar alucinações é crítico
-4. **Teste cenários reais:** Simule perguntas que um cliente faria de verdade
-5. **Seja direto no pitch:** 3 minutos passam rápido, vá ao ponto
+1. **O system prompt é tudo:** A persona jornalística e as regras anti-alucinação nascem dele
+2. **Web search em tempo real:** Nenhum arquivo local — a internet é a base de conhecimento
+3. **Cite sempre a fonte:** No jornalismo, credibilidade é inegociável
+4. **Teste edge cases:** Pedidos de opinião política e temas fora do escopo revelam fragilidades
+5. **Neutralidade é um diferencial:** Sem algoritmo de engajamento, sem bolha de opinião
+
+---
+
+## Sobre o Projeto
+
+Desenvolvido como parte do desafio **BIA do Futuro** da [DIO](https://www.dio.me/) — laboratório de criação de agentes inteligentes com IA Generativa.
